@@ -1,8 +1,8 @@
 class Vote < ActiveRecord::Base
 
-  scope :for_voter,    lambda { |*args| { where(["voter_id = ? AND voter_type = ?", args.first.id, args.first.type.name]) } }
-  scope :for_voteable, lambda { |*args| { where(["voteable_id = ? AND voteable_type = ?", args.first.id, args.first.type.name]) } }
-  scope :recent,       lambda { |*args| { where(["created_at > ?", (args.first || 2.weeks.ago).to_s(:db)]) } }
+  scope :for_voter,    lambda { |*args| where(["voter_id = ? AND voter_type = ?", args.first.id, args.first.type.name]) }
+  scope :for_voteable, lambda { |*args| where(["voteable_id = ? AND voteable_type = ?", args.first.id, args.first.type.name]) }
+  scope :recent,       lambda { |*args| where(["created_at > ?", (args.first || 2.weeks.ago).to_s(:db)]) }
   scope :descending, order("created_at DESC")
 
   # NOTE: Votes belong to the "voteable" interface, and also to voters
