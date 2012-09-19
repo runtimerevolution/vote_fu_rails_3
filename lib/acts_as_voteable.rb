@@ -31,17 +31,17 @@ module Juixe
 
  	# 
  	# Options:
- 	#  :start_at	- Restrict the votes to those created after a certain time
- 	#  :end_at	  - Restrict the votes to those created before a certain time
- 	#  :conditions  - A piece of SQL conditions to add to the query
- 	#  :limit	   - The maximum number of voteables to return
- 	#  :order	   - A piece of SQL to order by. Eg 'votes.count desc' or 'voteable.created_at desc'
- 	#  :at_least	- Item must have at least X votes
- 	#  :at_most	 - Item may not have more than X votes
+ 	# ï¿½:start_at	- Restrict the votes to those created after a certain time
+ 	# ï¿½:end_at	 ï¿½- Restrict the votes to those created before a certain time
+ 	# ï¿½:conditions ï¿½- A piece of SQL conditions to add to the query
+ 	# ï¿½:limit	 ï¿½ - The maximum number of voteables to return
+ 	# ï¿½:order	 ï¿½ - A piece of SQL to order by. Eg 'votes.count desc' or 'voteable.created_at desc'
+ 	# ï¿½:at_least	- Item must have at least X votes
+ 	# ï¿½:at_most	 - Item may not have more than X votes
  	def options_for_tally (conditions, options = {})
  		options.assert_valid_keys :start_at, :end_at, :conditions, :at_least, :at_most, :order, :limit, :offset, :novote
 
- 		scope = scope(:find)
+ 		#scope = scope(:find)
  		start_at = sanitize_sql(["#{Vote.table_name}.created_at >= ?", options.delete(:start_at)]) if options[:start_at]
  		end_at = sanitize_sql(["#{Vote.table_name}.created_at <= ?", options.delete(:end_at)]) if options[:end_at]
 
@@ -67,10 +67,10 @@ module Juixe
  		# group_by << " HAVING #{having}" unless having.blank?
 
  		# { :select	 => "#{table_name}.*, COALESCE(COUNT(#{Vote.table_name}.id),0) AS count, COALESCE(SUM(#{cast_column('vote', 'int')}),0) as good, COALESCE(COUNT(#{Vote.table_name}.id) - SUM(#{cast_column('vote', 'int')}),0) as bad, MAX(#{Vote.table_name}.created_at) as created, MAX(#{Vote.table_name}.updated_at) as updated", 
- 		#   :joins	  => joins.join(" "),
- 		#   :conditions => conditions,
- 		#   :group	  => group_by
- 		# }.update(options) 	  
+ 		# ï¿½ :joins	 ï¿½=> joins.join(" "),
+ 		# ï¿½ :conditions => conditions,
+ 		# ï¿½ :group	 ï¿½=> group_by
+ 		# }.update(options) 	 ï¿½
 
  		options_for_tally = select(select).where(conditions).where(options[:where]).joins(joins).group(group_by).having("COUNT(#{Vote.table_name}.id) > 0")
  		options_for_tally = options_for_tally.having(having) unless having.blank?
